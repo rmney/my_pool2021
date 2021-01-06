@@ -10,5 +10,6 @@
 #include <libgen.h>
 
 void	ft_putstr(char *str);
-
+void	ft_print_content(int fd);
+void	ft_errors(char *pname, char *argv, int ft_is_directory);
 #endif

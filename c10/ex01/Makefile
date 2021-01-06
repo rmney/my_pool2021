@@ -1,5 +1,5 @@
 NAME = "ft_cat"
-SRCS = srcs/ft_putstr.c
+SRCS = srcs/ft_putstr.c srcs/ft_errors.c srcs/ft_print_content.c
 MAIN = main.c
 HEADER = includes/ft.h
 
