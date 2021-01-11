@@ -1,107 +1,59 @@
-#include <stdio.h>
-#include <unistd.h>
-
-void	 print_hex(int nb)
+int     ft_check_all(char *base)
 {
+        int i;
         char *str;
+        char *str2;
+        int len;
+
+        i = 0;
         str = "0123456789abcdef";
-        if(nb == 0)
-                write(1, "0", 1);
-        while(nb)
+        len = 0;
+          while(base[len])
+              len++;
+          if(!(len == 2 || len == 8 || len == 10 || len == 16))
+                  return(0);
+        while(base[i])
         {
-              	write(1, &str[nb % 16], 1);
-                nb /= 16;
+                if(base[i] == str[i])
+                i++;
+        else
+                return(0);
+
         }
+
+        return(len);
 }
 
-int print_num(int decimalnum, int base)
-{
-    int octalnum = 0, temp = 1;
-
-    while (decimalnum != 0)
-    {
-        octalnum = octalnum + (decimalnum % base) * temp;
-        decimalnum = decimalnum / base;
-        temp = temp * 10;
-    }
-
-    return octalnum;
-}
-
-int	ft_atoi(char *str)
+int	ft_atoi_base(char *str, char *base)
 {
 	int i;
 	int num;
 	int sign;
+	int base_2;
+	base_2 = 0;
 
 	i = 0;
 	num = 0;
 	sign = 1;
-	while(str[i] == ' ' || str[i] == '\n' || str[i] == '\f' || str[i] == '\0')
+
+	while(str[i] == '\n' || str[i] == '\f' || str[i] == '\t' || str[i] == '\v' || str[i] == '\v')
 		i++;
 	if(str[i] == '+' || str[i] == '-')
 		if(str[i++] == '-')
 			sign = -1;
-	while(str[i] >= '0' && str[i] <= '9')
+	while(str[i] >= '0' && str[i] <= '9' || str[i] >= 'a' && str[i] <= 'f' || str[i] >= 'A' && str[i] <= '9')
 	{
-		num = num * 10 + (str[i] - '0');
+		if(ft_check_all(base) == 10 && str[i] >= '0' && str[i] <= '9')
+			num = num * 10 + (str[i] - '0');
+		if(ft_check_all(base) == 16 && str[i] >= 'a' && str[i] <= 'f')
+			num = num * 16 + (str[i] - 87);
+		if(ft_check_all(base) == 8 && str[i] >= 0 && str[i] <= '7')
+			num = num * 8 + (str[i] - '0');
+		if(ft_check_all(base) == 2 && str[i] >= '0' && str[i] <= '9')
+		{
+			num = (num * 2) + (str[i] - '0');
+		}
 		i++;
 	}
-	return(sign * num);
-}
-
-void    ft_putnbr(int nb)
-{
-        char c;
-        if(nb < 0)
-        {
-                nb = -nb;
-                write(1, "-", 1);
-        }
-        if(nb < 10)
-        {
-                c = nb + '0';
-                write(1, &c, 1);
-        }
-        else
-        {
-                ft_putnbr(nb / 10);
-                ft_putnbr(nb % 10);
-        }
-}
-
-
-int     ft_atoi_base(char *str, char *base)
-{
-	int i;
-	int a = i;
-	
-	i = ft_atoi(str);
-       	if(ft_atoi(base) == 16)
-	{
-		print_hex(i);
-		return(i);
-	}
-	if(ft_atoi(base) == 10)
-	{
-		ft_putnbr(i);
-		return(i);
-	}
-	if(ft_atoi(base) == 8)
-	{
-		ft_putnbr(print_num(i, 8));
-		return(i);
-	}
-	if(ft_atoi(base) == 2)
-	{
-		ft_putnbr(print_num(i, 2));
-		return(i);
-	}
-	return(a);
-}
-
-int	main()
-{
-	ft_atoi_base("10", "16");
-	return(0);
+	return(num * sign);
 }
